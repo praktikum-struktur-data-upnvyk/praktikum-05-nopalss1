@@ -71,21 +71,64 @@ string display(Stack& s) {
 
 // SOAL 1
 bool push(Stack& s, int nilai) {
-    return false;
+    Node* baru = new Node;
+    baru->data = nilai;
+    baru->next = s.top;
+    s.top = baru;
+    return true;
 }
 
 // SOAL 2
 bool pop(Stack& s, int& nilai) {
-    return false;
+    if (s.top == nullptr) {
+        cout << "pop ditolak: linked stack masih kosong\n";
+        return false;
+    }
+
+    Node* temp = s.top;
+    nilai = temp->data;
+    s.top = temp->next;
+    delete temp;
+    return true;
 }
 
 // SOAL 3
 void clear(Stack& s) {
+    while (s.top != nullptr) {
+        Node* temp = s.top;
+        s.top = s.top->next;
+        delete temp;
+    }
 }
 
 // SOAL 4
 bool kurungSeimbang(const string& ekspresi) {
-    return false;
+    Stack s;
+    inisialisasi(s);
+
+    for (char c : ekspresi) {
+        if (c == '(' || c == '[' || c == '{') {
+            push(s, static_cast<int>(c));
+            continue;
+        }
+
+        if (c == ')' || c == ']' || c == '}') {
+            int atas = 0;
+            if (isEmpty(s) || !peek(s, atas)) return false;
+
+            char buka = static_cast<char>(atas);
+            bool cocok = (buka == '(' && c == ')') ||
+                         (buka == '[' && c == ']') ||
+                         (buka == '{' && c == '}');
+
+            if (!cocok) return false;
+
+            int dummy = 0;
+            pop(s, dummy);
+        }
+    }
+
+    return isEmpty(s);
 }
 
 // =============================================================================
